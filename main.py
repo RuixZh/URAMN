@@ -14,7 +14,6 @@ def parse_args():
     parser = argparse.ArgumentParser(description='URAMN')
 
     parser.add_argument('--dataset', nargs='?', default='acm')
-    parser.add_argument('--metapaths', nargs='?', default='MAM,MDM')
 
     parser.add_argument('--nb_epochs', type=int, default=1000)
     parser.add_argument('--hid_units', type=int, default=64)
@@ -23,7 +22,6 @@ def parse_args():
     parser.add_argument('--drop_prob', type=float, default=0.5)
     parser.add_argument('--reg_coef', type=float, default=0.01)
     parser.add_argument('--sup_coef', type=float, default=1.0)
-    parser.add_argument('--sc', type=float, default=3.0, help='GCN self connection')
     parser.add_argument('--alpha', type=float, default=0.1) # 0.1 for dblp, 0.1 for acm, 0.8 for yelp
     parser.add_argument('--beta', type=float, default=0.2)  # 0.2 for dblp, 0.2 for acm, 0.8 for yelp
     

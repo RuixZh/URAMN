@@ -15,16 +15,9 @@ def indices_to_one_hot(data, nb_classes):
 
 def load_data2(args):
     dataset = args.dataset
-    metapaths = args.metapaths_list
-    if (metapaths[0] == 'cited') or (metapaths[0]=='citing'):
-        target = 'p'
-    else:
-        target = metapaths[0][0]
-    sc = args.sc
     if dataset == 'acm':
-        load_prefix = '../arga/ACM/preprocess/'
+        load_prefix = './ACM/preprocess/'
         metapaths =  [(0,1,0),(0,2,0)]
-    #     features[features>1]=1
         labels = np.load(load_prefix + 'truth.npy')
         num_classes = len(set(labels))
         N = labels.shape[0]  # nodesize
@@ -33,10 +26,7 @@ def load_data2(args):
         for mp in metapaths:
             adj = sp.load_npz(load_prefix + '-'.join(map(str, mp)) + '_normalize_adj.npz')
             adj[adj>0] = 1
-            rownetworks.append(sp.csr_matrix(adj)+0*args.sc * sp.eye(N))
-#         features = sp.load_npz(load_prefix + 'all_features.npz')
-#         adj = sp.load_npz(load_prefix + 'all_adj.npz')
-#         rownetworks = [adj]
+            rownetworks.append(sp.csr_matrix(adj))
         if sp.issparse(features):
             truefeatures = features.toarray()
         else:
@@ -44,7 +34,7 @@ def load_data2(args):
         truefeatures = preprocess_features(features)
 
     elif dataset == 'dblp':
-        load_prefix = '../arga/DBLP/preprocess/'
+        load_prefix = './DBLP/preprocess/'
         metapaths =  [(0,1,0),(0,1,2,1,0),(0,1,3,1,0)]
         features = sp.load_npz(load_prefix + 'node_features.npz')
         labels = np.load(load_prefix + 'truth.npy')
@@ -54,7 +44,7 @@ def load_data2(args):
         for mp in metapaths:
             adj = sp.load_npz(load_prefix + '-'.join(map(str, mp)) + '_normalize_adj.npz')
             adj[adj>0] = 1
-            rownetworks.append(sp.csr_matrix(adj)+0*args.sc * sp.eye(N))
+            rownetworks.append(sp.csr_matrix(adj))
 
         if sp.issparse(features):
             truefeatures = features.toarray()
@@ -63,8 +53,8 @@ def load_data2(args):
         truefeatures = preprocess_features(features)
         
     elif dataset == 'yelp':
-         # business 0, user 1, star 2, level 3
-        load_prefix = '../arga/Yelp/preprocess/'
+         # business 0, user 1, star 2
+        load_prefix = './Yelp/preprocess/'
         metapaths = [(0,2,0),(0,1,0)]
         features = sp.load_npz(load_prefix + 'node_features.npz')
         labels = np.load(load_prefix + 'truth.npy')
